@@ -1,6 +1,7 @@
 from flask import Flask
 
 from app.extensions import migrate
+from app.extensions import database
 
 app = Flask(__name__)
 
