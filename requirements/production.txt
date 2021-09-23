@@ -8,6 +8,7 @@ click
 marshmallow
 Flask_Bcrypt
 flask_apispec
+Flask-HTTPAuth
 Flask
 PyJWT
 Flask-JWT-Extended
