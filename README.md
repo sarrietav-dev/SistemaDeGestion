@@ -6,42 +6,47 @@ Quickstart
 
 
 First, set your app's secret key as an environment variable. For example,
-add the following to ``.bashrc`` or ``.bash_profile``.
+add the following to ``.env``.
 
-.. code-block:: bash
-
-    export CONDUIT_SECRET='something-really-secret'
+    export SECRET_KEY='something-really-secret'
 
 Before running shell commands, set the ``FLASK_APP`` and ``FLASK_DEBUG``
-environment variables ::
+environment variables:
 
-    export FLASK_APP=/path/to/autoapp.py
+    export FLASK_APP=/web/app.py
     export FLASK_DEBUG=1
 
-Then run the following commands to bootstrap your environment ::
+Then run the following commands to bootstrap your environment:
 
     git clone https://github.com/CAMINO-Murillo/SistemaDeGestion
     cd SistemaDeGestion
     pip install -r requirements/development.txt
 
 
-Run the following commands to create your app's
-database tables and perform the initial migration ::
+To start Docker Machine, first make sure you’re in the project root and then simply run:
+this command:
 
-    flask db init
-    flask db migrate
-    flask db upgrade
+    docker-machine create -d virtualbox dev;
 
-To run the web application use::
+The create command setup a “machine” (called dev) for Docker development.
+In essence, it downloaded boot2docker and started a VM with Docker running.
+Now just point the Docker client at the dev machine via:
 
-    flask run --with-threads
+    eval "$(docker-machine env dev)"
 
+Now, to get the containers running, build the images and then start the services:
+
+    docker-compose up --build -d
+
+We also need to create the database table:
+
+    docker-compose run web /usr/local/bin/python create_db.py
 
 Deployment
 ----------
 
 In your production environment, make sure the ``FLASK_DEBUG`` environment
-variable is unset or is set to ``0``, so that ``ProdConfig`` is used, and
+variable is unset or is set to ``0``, so that ``BaseConfig`` is used, and
 set ``DATABASE_URL`` which is your postgresql URI for example
 ``postgresql://localhost/example`` (this is set by default in heroku).
 
@@ -49,32 +54,40 @@ set ``DATABASE_URL`` which is your postgresql URI for example
 Shell
 -----
 
-To open the interactive shell, run ::
+To open the interactive shell, run:
 
     flask shell
 
-By default, you will have access to the flask ``app`` and models.
+By default, you will have access to the flask ``web`` and models.
 
 
 Running Tests
 -------------
 
-To run all tests, run ::
+To run all tests, run:
 
     flask test
 
 
-Migrations
+Deployment to cloud
 ----------
 
-Whenever a database migration needs to be made. Run the following commands ::
+So, with our app running locally, we can now push this exact same environment to a cloud hosting provider with Docker Machine.
+Let’s deploy to a Digital Ocean droplet.
 
-    flask db migrate
+After you sign up for Digital Ocean, generate a Personal Access Token, and then run the following command:
 
-This will generate a new migration script. Then run ::
+    docker-machine create \
+    -d digitalocean \
+    --digitalocean-access-token ADD_YOUR_TOKEN_HERE \
+    production
 
-    flask db upgrade
+Then set production as the active machine and load the Docker environment into the shell:
 
-To apply the migration.
+    eval "$(docker-machine env production)"
 
-For a full migration command reference, run ``flask db --help``.
+Finally, let’s build the Flask app again in the cloud:
+
+    docker-compose build
+    docker-compose up -d
+    docker-compose run web /usr/local/bin/python create_db.py
