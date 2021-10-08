@@ -9,3 +9,4 @@ Werkzeug
 gunicorn
 itsdangerous
 psycopg2
+passlib
