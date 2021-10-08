@@ -6,7 +6,7 @@ Quickstart
 
 
 First, set your app's secret key as an environment variable. For example,
-add the following to ``.bashrc`` or ``.bash_profile`` or ``.env``.
+add the following to ``.env``.
 
     export SECRET_KEY='something-really-secret'
 
