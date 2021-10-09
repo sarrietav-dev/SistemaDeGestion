@@ -4,8 +4,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from .config import BaseConfig
 
-from routes.appointments import appointments_blueprint
-from routes.users import users_blueprint
+from .routes.appointments import appointments_blueprint
+from .routes.users import users_blueprint
 
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
