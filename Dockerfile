@@ -6,3 +6,9 @@ COPY requirements/production.txt requirements.txt
 RUN python -m pip install -r requirements.txt
 
 COPY  . .
+
+ENV FLASK_APP=web/app.py
+
+EXPOSE 5000
+
+CMD [ "flask", "run" ]

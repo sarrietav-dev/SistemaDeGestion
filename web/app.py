@@ -2,8 +2,8 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from .config import BaseConfig
 
-from config import BaseConfig
 from routes.appointments import appointments_blueprint
 from routes.users import users_blueprint
 
