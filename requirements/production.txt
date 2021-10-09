@@ -10,3 +10,4 @@ gunicorn
 itsdangerous
 psycopg2
 python-dotenv
+passlib
