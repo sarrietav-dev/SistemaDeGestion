@@ -22,7 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements/development.txt
 
-      - name: Test with Flask
-        run: flask test
+      - name: Test with pytest
+        run: pytest
         env:
           FLASK_APP: web/app.py
