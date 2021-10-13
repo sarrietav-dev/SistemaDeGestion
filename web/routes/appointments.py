@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 
 auth = HTTPBasicAuth()
@@ -36,6 +36,22 @@ def appointment_id(number):
         "description": "<object: MedicHistory>",
         "comentarios": "Ninguno"
     }})
+
+
+@appointments_blueprint.route('/appointments/new/', methods=['POST'])
+@auth.login_required
+def add_appointment_post():
+    medico = request.form.get('medico')
+    paciente = request.form.get('paciente')
+    fecha = request.form.get('fecha')
+    # TODO: request the complete data for appointment validation
+
+
+@appointments_blueprint.route('/appointments/delete/<int:identifier>')
+@auth.login_required
+def delete_appointment(identifier: int):
+    appointment_id = identifier
+    # TODO: request the complete data for appointment deletion
 
 
 @auth.verify_password

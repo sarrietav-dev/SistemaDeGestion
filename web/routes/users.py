@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 
 auth = HTTPBasicAuth()
@@ -25,12 +25,29 @@ def users():
     )
 
 
+@users_blueprint.route('/users/new/', methods=['POST'])
+@auth.login_required
+def signup_post():
+    name = request.form.get('name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    # TODO: request the complete data for user validation
+
+
+@users_blueprint.route('/users/delete/<int:identifier>')
+@auth.login_required
+def delete_user(identifier: int):
+    appointment_id = identifier
+    # TODO: request the complete data for appointment deletion
+
+
 @users_blueprint.route('/users/<int:number>/')
 def user_id(number):
     return jsonify(
         {f"{number}": {
             "nombreCompleto": "Sean J Person",
-            "fechaNacimiento": "Paciente",
+            "tipo": "Paciente",
+            "fechaNacimiento": "24/05/1983",
             "genero": "hombre",
             "direccion": "1403 Godfrey Street OR",
             "celular": "503-622-2975",

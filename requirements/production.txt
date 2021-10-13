@@ -2,6 +2,7 @@
 
 Flask
 Flask-SQLAlchemy
+Flask-Login
 Jinja2
 MarkupSafe
 SQLAlchemy

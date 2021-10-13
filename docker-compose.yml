@@ -7,24 +7,32 @@ services:
     expose:
       - "8000"
     links:
-      - postgres:postgres
-    env_file: 
+      - mysql:mysql
+    env_file:
       - .env
     command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
-
   data:
-    image: postgres:latest
+      environment:
+        MYSQL_DATABASE: 'mysql'
+        MYSQL_USER: 'caminomurillo'
+        MYSQL_PASSWORD: 'murillo12'
+        MYSQL_ROOT_PASSWORD: 'murillo12'
+      ports:
+        - '3306:3306'
+      expose:
+        - '3306'
+    image: mysql:latest
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/mysql
     command: "true"
 
-  postgres:
+  mysql:
     restart: always
-    image: postgres:latest
+    image: mysql:latest
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/mysql
     ports:
-      - "5432:5432"
+      - "3306:3306"
 
 volumes:
   db-data:
