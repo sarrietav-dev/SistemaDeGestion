@@ -9,5 +9,7 @@ SQLAlchemy
 Werkzeug
 gunicorn
 itsdangerous
-psycopg2
+psycopg2-binary
+python-dotenv
 passlib
+flask_httpauth
