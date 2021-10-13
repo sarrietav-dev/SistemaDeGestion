@@ -4,5 +4,3 @@ app/__pycache__/
 app/__pycache__/app.cpython-39.pyc
 .devcontainer/devcontainer.json
 web/__pycache__/
-web/__pycache__/
-web/__pycache__/
