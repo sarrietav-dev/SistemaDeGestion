@@ -5,7 +5,7 @@ auth = HTTPBasicAuth()
 appointments_blueprint = Blueprint('appointments', __name__)
 
 
-@appointments_blueprint.route('/appointments/')
+@appointments_blueprint.route('/api/v1/appointments/')
 @auth.login_required
 def appointments():
     return jsonify(
@@ -26,7 +26,7 @@ def appointments():
     )
 
 
-@appointments_blueprint.route('/appointments/<int:number>/')
+@appointments_blueprint.route('/api/v1/appointments/<int:number>/')
 def appointment_id(number):
     return jsonify({f"{number}": {
         "medico": "Juan Lopez",
@@ -38,7 +38,7 @@ def appointment_id(number):
     }})
 
 
-@appointments_blueprint.route('/appointments/new/', methods=['POST'])
+@appointments_blueprint.route('/api/v1/appointments/new/', methods=['POST'])
 @auth.login_required
 def add_appointment_post():
     medico = request.form.get('medico')
@@ -47,7 +47,7 @@ def add_appointment_post():
     # TODO: request the complete data for appointment validation
 
 
-@appointments_blueprint.route('/appointments/delete/<int:identifier>')
+@appointments_blueprint.route('/api/v1/appointments/delete/<int:identifier>')
 @auth.login_required
 def delete_appointment(identifier: int):
     appointment_id = identifier

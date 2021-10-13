@@ -5,7 +5,7 @@ auth = HTTPBasicAuth()
 users_blueprint = Blueprint('users', __name__)
 
 
-@users_blueprint.route('/users/')
+@users_blueprint.route('/api/v1/users/')
 @auth.login_required
 def users():
     return jsonify(
@@ -25,23 +25,23 @@ def users():
     )
 
 
-@users_blueprint.route('/users/new/', methods=['POST'])
+@users_blueprint.route('/api/v1/users/new/', methods=['POST'])
 @auth.login_required
-def signup_post():
+def add_user():
     name = request.form.get('name')
     email = request.form.get('email')
     password = request.form.get('password')
     # TODO: request the complete data for user validation
 
 
-@users_blueprint.route('/users/delete/<int:identifier>')
+@users_blueprint.route('/api/v1/users/delete/<int:identifier>')
 @auth.login_required
 def delete_user(identifier: int):
     appointment_id = identifier
     # TODO: request the complete data for appointment deletion
 
 
-@users_blueprint.route('/users/<int:number>/')
+@users_blueprint.route('/api/v1/users/<int:number>/')
 def user_id(number):
     return jsonify(
         {f"{number}": {
