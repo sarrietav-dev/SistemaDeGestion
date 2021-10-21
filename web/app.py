@@ -5,7 +5,7 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from .config import BaseConfig
 
-from auth import auth as auth_blueprint
+from .auth import auth as auth_blueprint
 from .routes.appointments import appointments_blueprint
 from .routes.users import users_blueprint
 
