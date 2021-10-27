@@ -25,6 +25,10 @@ class Medico(Base):
     email = Column(String, nullable=False)
     contraseña = Column(String, nullable=False)
 
+    citas = relationship("Cita", back_populates='medico')
+    historias_clinicas = relationship(
+        "HistoriaClinica", back_populates='medico')
+
 
 class Paciente(Base):
     __tablename__ = 'pacientes'
@@ -38,6 +42,10 @@ class Paciente(Base):
     email = Column(String, nullable=False)
     contraseña = Column(String, nullable=False)
 
+    citas = relationship("Cita", back_populates='paciente')
+    historias_clinicas = relationship(
+        "HistoriaClinica", back_populates='paciente')
+
 
 class Cita(Base):
     __tablename__ = 'citas'
@@ -49,8 +57,8 @@ class Cita(Base):
     tipo = Column(String)
     motivo = Column(Text)
 
-    medico = relationship('Medico', foreign_keys='Cita.id_medico')
-    paciente = relationship('Paciente', foreign_keys='Cita.id_paciente')
+    medico = relationship('Medico', back_populates="citas")
+    paciente = relationship('Paciente', back_populates="citas")
 
 
 class HistoriaClinica(Base):
@@ -62,9 +70,9 @@ class HistoriaClinica(Base):
     fecha = Column(DateTime(timezone=True), server_default=func.now())
     comentarios = Column(Text)
 
-    medico = relationship('Medico', foreign_keys='HistoriaClinica.id_medico')
+    medico = relationship('Medico', back_populates='historias_clinicas')
     paciente = relationship(
-        'Paciente', foreign_keys='HistoriaClinica.id_paciente')
+        'Paciente', back_populates='historias_clinicas')
 
 
 Base.metadata.create_all(engine)
