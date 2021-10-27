@@ -11,8 +11,6 @@ engine = create_engine("sqlite:///db.sqlite")
 
 Base = declarative_base()
 
-Base.metadata.create_all(engine)
-
 
 class Medico(Base):
     __tablename__ = 'medicos'
@@ -67,3 +65,6 @@ class HistoriaClinica(Base):
     medico = relationship('Medico', foreign_keys='HistoriaClinica.id_medico')
     paciente = relationship(
         'Paciente', foreign_keys='HistoriaClinica.id_paciente')
+
+
+Base.metadata.create_all(engine)
