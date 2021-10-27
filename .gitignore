@@ -3,4 +3,8 @@ venv
 app/__pycache__/
 app/__pycache__/app.cpython-39.pyc
 .devcontainer/devcontainer.json
+
 web/__pycache__/
+web/routes/__pycache__/__init__.cpython-38.pyc
+web/routes/__pycache__/appointments.cpython-38.pyc
+web/routes/__pycache__/users.cpython-38.pyc
