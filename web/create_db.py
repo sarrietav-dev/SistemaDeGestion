@@ -22,22 +22,23 @@ class Medico(Base):
     apellido = Column(String, nullable=False)
     direccion = Column(String)
     telefono = Column(String)
-    email = Column(String)
     especialidad = Column(String)
     contraseña = Column(String)
+    email = Column(String, nullable=False)
+    contraseña = Column(String, nullable=False)
 
 
 class Paciente(Base):
     __tablename__ = 'pacientes'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    nombre = Column(String, nullable=False)
-    apellido = Column(String, nullable=False)
+    nombre = Column(String)
+    apellido = Column(String)
     direccion = Column(String)
     telefono = Column(String)
-    email = Column(String)
     fecha_de_nacimiento = Column(DateTime)
-    contraseña = Column(String)
+    email = Column(String, nullable=False)
+    contraseña = Column(String, nullable=False)
 
 
 class Cita(Base):
