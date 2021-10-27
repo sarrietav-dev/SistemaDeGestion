@@ -1,11 +1,13 @@
 
+from sqlalchemy.engine import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.functions import func
 from sqlalchemy.sql.schema import Column, ForeignKey
 
 from sqlalchemy.sql.sqltypes import DateTime, Integer, String, Text
-from .app import engine
+
+engine = create_engine("sqlite:///db.sqlite")
 
 Base = declarative_base()
 

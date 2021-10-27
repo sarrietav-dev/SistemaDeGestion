@@ -19,9 +19,6 @@ app.register_blueprint(appointments_blueprint)
 app.register_blueprint(users_blueprint)
 app.register_blueprint(auth_blueprint)
 
-engine = create_engine("sqlite:///db.sqlite")
-
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
