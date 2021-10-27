@@ -1,6 +1,11 @@
+import bcrypt
 from flask import Blueprint, redirect, url_for, request, flash
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
+from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import or_, text
+
+from .create_db import Medico, Paciente, engine
 
 from web.models import User
 
@@ -16,21 +21,32 @@ def logout():
 
 @auth.route('/signup', methods=['POST'])
 def signup_post():
+
+    # Get request data
     email = request.form.get('email')
-    name = request.form.get('name')
     password = request.form.get('password')
-    # TODO: Request the complete data from forms
 
-    # TODO: Check if the user already exists and redirect to
-    # return redirect(url_for('auth.signup'))
+    db_session = Session(engine)
 
-    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, name=name,
-                    password=generate_password_hash(password))
+    # Check if the email is duplicated in the database
+    existing_emails = db_session.query(
+        Paciente, Medico).filter_by(email=email)
 
-    # TODO: add the new user to the database
+    if (existing_emails.first() is not None):
+        return "Email already exists", 400
 
-    return redirect(url_for('auth.login'))
+    # Hash password with Bcrypt
+    password_hash = generate_password_hash(password)
+
+    # Create new Paciente
+    new_paciente = Paciente(email=email, contraseña=password_hash)
+
+    # Add and submit the new paciente to the database. And close the session.
+    db_session.add(new_paciente)
+    db_session.commit()
+    db_session.close()
+
+    return "Signup succesful", 200
 
 
 @auth.route('/login', methods=['POST'])
