@@ -4,21 +4,20 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from .config import BaseConfig
-from .auth import auth as auth_blueprint
-from .routes.appointments import appointments_blueprint
-from .routes.users import users_blueprint
+from web.auth import auth as auth_blueprint
+from web.config import BaseConfig
+from web.routes.appointments import appointments_blueprint
+from web.routes.users import users_blueprint
 
 app = Flask(__name__)
-app.config.from_object(BaseConfig)
+app.config.from_object(BaseConfig.SQLALCHEMY_DATABASE_URI)
 db = SQLAlchemy(app)
 
 app.register_blueprint(appointments_blueprint)
 app.register_blueprint(users_blueprint)
 app.register_blueprint(auth_blueprint)
 
+engine = create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
