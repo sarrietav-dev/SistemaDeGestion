@@ -1,20 +1,15 @@
+import bcrypt
 from flask import Blueprint, redirect, url_for, request, flash
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
+from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import or_, text
+
+from .create_db import Medico, Paciente, engine
 
 from web.models import User
 
 auth = Blueprint('auth', __name__)
-
-
-@auth.route('/login')
-def login():
-    return 'Login'
-
-
-@auth.route('/signup')
-def signup():
-    return 'Signup'
 
 
 @auth.route('/logout')
@@ -26,35 +21,47 @@ def logout():
 
 @auth.route('/signup', methods=['POST'])
 def signup_post():
+
+    # Get request data
     email = request.form.get('email')
-    name = request.form.get('name')
     password = request.form.get('password')
-    # TODO: Request the complete data from forms
 
-    # TODO: Check if the user already exists and redirect to
-    # return redirect(url_for('auth.signup'))
+    db_session = Session(engine)
 
-    # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, name=name, password=generate_password_hash(password))
+    # Check if the email is duplicated in the database
+    existing_emails = db_session.query(
+        Paciente, Medico).filter_by(email=email)
 
-    # TODO: add the new user to the database
+    if (existing_emails.first() is not None):
+        return "Email already exists", 400
 
-    return redirect(url_for('auth.login'))
+    # Hash password with Bcrypt
+    password_hash = generate_password_hash(password)
+
+    # Create new Paciente
+    new_paciente = Paciente(email=email, contraseña=password_hash)
+
+    # Add and submit the new paciente to the database. And close the session.
+    db_session.add(new_paciente)
+    db_session.commit()
+    db_session.close()
+
+    return "Signup succesful", 200
 
 
 @auth.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
 
-    user = User(name="Sean J Person", email="seanperson20@hotmail.com", password="5f4dcc3b5aa765d61d8327deb882cf99")
+    db_session = Session(engine)
+    existing_user = db_session.query(
+        Paciente, Medico).filter_by(email=email).first()
 
-    # check if the user actually exists
-    # take the user-supplied password, hash it, and compare it to the hashed password in the database
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('auth.login'))  # if the user doesn't exist or password is wrong, reload the page
-    login_user(user, remember=remember)
-    # if the above check passes, then we know the user has the right credentials
-    return redirect(url_for('main.profile'))
+    if (existing_user is None):
+        return "Email doesn't exist", 400
+
+    if (check_password_hash(existing_user.contraseña, password)):
+        return "Logged in", 200
+
+    return "Invalid credentials", 400
