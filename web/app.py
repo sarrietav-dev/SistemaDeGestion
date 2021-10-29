@@ -3,14 +3,16 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from flask_session import Session
+
 from web.auth import auth as auth_blueprint
-from web.config import BaseConfig
 from web.routes.appointments import appointments_blueprint
 from web.routes.users import users_blueprint
 
 app = Flask(__name__)
-# app.config.from_object(BaseConfig.SQLALCHEMY_DATABASE_URI)
+
+Session(app)
+
 db = SQLAlchemy(app)
 
 app.register_blueprint(appointments_blueprint)
