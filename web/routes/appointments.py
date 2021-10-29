@@ -49,7 +49,7 @@ def add_appointment_post():
 @appointments_blueprint.route('/api/v1/appointments/delete/<int:identifier>')
 @auth.login_required
 def delete_appointment(identifier: int):
-    session.query(Cita).filter_by(id=identifier).delete()
+    return str(session.query(Cita).filter_by(id=identifier).delete())
 
 
 @auth.verify_password
