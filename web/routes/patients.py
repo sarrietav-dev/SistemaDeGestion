@@ -6,6 +6,19 @@ from web.create_db import Paciente, engine
 patients_blueprint = Blueprint('patients', __name__)
 
 
+@patients_blueprint.route("/api/v1/patients/<id>")
+def one_patient(id):
+    db_session = Session(engine)
+
+    query = db_session.query(Paciente).filter(Paciente.id == id).one()
+
+    patient_data = query.__dict__
+    patient_data.pop('_sa_instance_state', None)
+    patient_data.pop('contraseña', None)
+
+    return jsonify(patient_data), 200
+
+
 @patients_blueprint.route("/api/v1/patients")
 def patients():
     db_session = Session(engine)
@@ -19,5 +32,5 @@ def patients():
         patient_data.pop('_sa_instance_state', None)
         patient_data.pop('contraseña', None)
         response_data.append(patient_data)
-    
+
     return jsonify(response_data), 200
