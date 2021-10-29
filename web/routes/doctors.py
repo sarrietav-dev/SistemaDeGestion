@@ -6,6 +6,21 @@ from web.create_db import Medico, engine
 doctors_blueprint = Blueprint('doctors', __name__)
 
 
+@doctors_blueprint.route("/api/v1/doctors/<id>")
+def one_patient(id):
+    db_session = Session(engine)
+
+    query = db_session.query(Medico).filter(Medico.id == id).one()
+
+    doctor_data = query.__dict__
+    doctor_data.pop('_sa_instance_state', None)
+    doctor_data.pop('contraseña', None)
+
+    db_session.close()
+
+    return jsonify(doctor_data), 200
+
+
 @doctors_blueprint.route("/api/v1/doctors")
 def doctors():
     db_session = Session(engine)
