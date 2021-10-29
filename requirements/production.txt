@@ -16,3 +16,4 @@ flask_httpauth
 flask_login
 flask_bcrypt
 flask_session
+simplejson
