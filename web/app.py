@@ -21,6 +21,7 @@ app.register_blueprint(auth_blueprint)
 
 # engine = create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return "Reto Ciclo 3"

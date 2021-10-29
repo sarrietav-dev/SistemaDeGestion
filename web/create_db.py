@@ -1,4 +1,4 @@
-
+from itsdangerous import json
 from sqlalchemy.engine import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -10,6 +10,10 @@ from sqlalchemy.sql.sqltypes import DateTime, Integer, String, Text
 engine = create_engine("sqlite:///db.sqlite")
 
 Base = declarative_base()
+
+
+def json_default(ordered_dict):
+    return ordered_dict.__dict__
 
 
 class Medico(Base):
@@ -56,9 +60,24 @@ class Cita(Base):
     fecha = Column(DateTime(timezone=True), server_default=func.now())
     tipo = Column(String)
     motivo = Column(Text)
+    precio = Column(Text)
 
     medico = relationship('Medico', back_populates="citas")
     paciente = relationship('Paciente', back_populates="citas")
+
+    def __init__(self, id_medico, id_paciente, fecha, tipo, motivo, precio):
+        self.id_medico = id_medico
+        self.id_paciente = id_paciente
+        self.fecha = fecha
+        self.tipo = tipo
+        self.motivo = motivo
+        self.precio = precio
+
+    def __repr__(self):
+        return json.dumps(self, default=json_default, indent=4)
+
+    def __str__(self):
+        return self.id
 
 
 class HistoriaClinica(Base):
