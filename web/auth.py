@@ -2,8 +2,8 @@ import bcrypt
 from flask import Blueprint, redirect, url_for, request, flash
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
-from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import or_, text
+from sqlalchemy.orm import Session, session
+from sqlalchemy.sql.expression import or_, select, text
 
 from .create_db import Medico, Paciente, engine
 
@@ -54,14 +54,13 @@ def login_post():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    db_session = Session(engine)
-    existing_user = db_session.query(
-        Paciente, Medico).filter_by(email=email).first()
+    existing_user = engine.execute(text(
+        "SELECT * FROM (SELECT email, contraseña FROM pacientes UNION SELECT email, contraseña FROM medicos) WHERE email = :email"), email=email).first()
 
     if (existing_user is None):
         return "Email doesn't exist", 400
 
-    if (check_password_hash(existing_user.contraseña, password)):
+    if (check_password_hash(existing_user["contraseña"], password)):
         return "Logged in", 200
 
     return "Invalid credentials", 400
