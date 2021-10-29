@@ -6,6 +6,4 @@ app/__pycache__/app.cpython-39.pyc
 sqlite.db
 web/__pycache__/
 web/routes/__pycache__/
-web/routes/__pycache__/
-web/routes/__pycache__/
-web/routes/__pycache__/
+
