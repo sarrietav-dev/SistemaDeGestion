@@ -9,6 +9,7 @@ from web.auth import auth as auth_blueprint
 from web.routes.appointments import appointments_blueprint
 from web.routes.users import users_blueprint
 from web.routes.patients import patients_blueprint
+from web.routes.doctors import doctors_blueprint
 
 app = Flask(__name__)
 
@@ -20,6 +21,7 @@ app.register_blueprint(appointments_blueprint)
 app.register_blueprint(users_blueprint)
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(patients_blueprint)
+app.register_blueprint(doctors_blueprint)
 
 # engine = create_engine(BaseConfig.SQLALCHEMY_DATABASE_URI)
 
