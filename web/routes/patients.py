@@ -16,6 +16,8 @@ def one_patient(id):
     patient_data.pop('_sa_instance_state', None)
     patient_data.pop('contraseña', None)
 
+    db_session.close()
+
     return jsonify(patient_data), 200
 
 
@@ -32,5 +34,7 @@ def patients():
         patient_data.pop('_sa_instance_state', None)
         patient_data.pop('contraseña', None)
         response_data.append(patient_data)
+
+    db_session.close()
 
     return jsonify(response_data), 200
