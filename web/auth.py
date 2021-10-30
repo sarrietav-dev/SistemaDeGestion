@@ -23,8 +23,10 @@ def logout():
 def signup_post():
 
     # Get request data
-    email = request.form.get('email')
-    password = request.form.get('password')
+    data = request.get_json()
+
+    email = data['email']
+    password = data['password']
 
     db_session = Session(engine)
 

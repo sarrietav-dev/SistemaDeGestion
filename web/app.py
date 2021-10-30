@@ -5,6 +5,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
+from flask_cors import CORS
 
 from web.auth import auth as auth_blueprint
 from web.config import BaseConfig
@@ -14,6 +15,7 @@ from web.routes.patients import patients_blueprint
 from web.routes.doctors import doctors_blueprint
 
 app = Flask(__name__)
+CORS(app)
 
 # app.secret_key(BaseConfig.SECRET_KEY)
 
