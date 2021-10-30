@@ -1,5 +1,6 @@
 .idea
 myvenv
+venv
 app/__pycache__/
 app/__pycache__/app.cpython-39.pyc
 .devcontainer/devcontainer.json
