@@ -61,7 +61,7 @@ def login_post():
         return "Email doesn't exist", 400
 
     if (check_password_hash(existing_user["contraseña"], password)):
-        session["user_email"] = email
+        # session["user_email"] = email
 
         response = make_response("Logged in")
         response.status_code = 200

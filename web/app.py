@@ -1,17 +1,21 @@
 # app.py
 
+import os
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 
 from web.auth import auth as auth_blueprint
+from web.config import BaseConfig
 from web.routes.appointments import appointments_blueprint
 from web.routes.users import users_blueprint
 from web.routes.patients import patients_blueprint
 from web.routes.doctors import doctors_blueprint
 
 app = Flask(__name__)
+
+# app.secret_key(BaseConfig.SECRET_KEY)
 
 Session(app)
 
