@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import simplejson
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -17,11 +17,17 @@ appointments_blueprint = Blueprint('appointments', __name__)
 
 
 @appointments_blueprint.route('/api/v1/appointments/')
-@auth.login_required
+# @auth.login_required
 def appointments():
     all_rows = session.query(Cita).all()
-    response = simplejson.dumps(all_rows)
-    return response
+    response_data = []
+
+    for q in all_rows:
+        patient_data = q.__dict__
+        patient_data.pop('_sa_instance_state', None)
+        patient_data.pop('contraseña', None)
+        response_data.append(patient_data)
+    return jsonify(response_data), 200
 
 
 @appointments_blueprint.route('/api/v1/appointments/<int:number>/')
@@ -32,7 +38,7 @@ def appointment_id(number):
 
 
 @appointments_blueprint.route('/api/v1/appointments/new/', methods=['POST'])
-@auth.login_required
+# @auth.login_required
 def add_appointment_post():
     id_medico = request.form.get('medico')
     id_paciente = request.form.get('paciente')
@@ -41,9 +47,11 @@ def add_appointment_post():
     tipo = request.form.get('tipo')
     motivo = request.form.get('motivo')
     precio = request.form.get('precio')
-    cita = Cita(0, int(id_medico), int(id_paciente), fecha, str(tipo), motivo, precio)
+    cita = Cita(int(id_medico), int(id_paciente), fecha, str(tipo), motivo, precio)
     session.add(cita)
     session.commit()
+
+    return "Sucessful", 200
 
 
 @appointments_blueprint.route('/api/v1/appointments/delete/<int:identifier>')
